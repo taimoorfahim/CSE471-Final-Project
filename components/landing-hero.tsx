@@ -16,7 +16,7 @@ export const LandingHero = () => {
                         options={{
                             strings: [
                                 "Activity Registration",
-                                "Avtivity View",
+                                "Activity View",
                                 "Seminer Registration",
                                 "Workshop Registration",
                                 "Meal Ordering",
