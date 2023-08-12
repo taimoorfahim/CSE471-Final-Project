@@ -4,6 +4,7 @@ import {
   getStudentsByEmailService,
   getStudentsService,
   updateManyStudentsService,
+  updateStudentById,
 } from "../services/student.services";
 
 const getStudents = async (req: Request, res: Response, next: NextFunction) => {
@@ -63,7 +64,10 @@ const addStudents = async (req: Request, res: Response, next: NextFunction) => {
     res.status(400).json({
       success: false,
       err: err.message,
-      message: "Error in Adding student",
+      message: `Error in Adding student \n ${err.message}
+      
+      
+      `,
     });
   }
 };
@@ -84,10 +88,28 @@ const updateStudents = async (req: Request, res: Response, next: NextFunction) =
     });
   }
 };
+const updateAStudent = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const {id} = req.params;
+    const updatedQuery = req.body;
+    const result = await updateStudentById(id, updatedQuery);
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (err: any) {
+    res.status(400).json({
+      success: false,
+      err: err.message,
+      message: "Error in Updating student",
+    });
+  }
+};
 
     export default {
       getStudents,
       getStudentsByEmail,
       addStudents,
-      updateStudents
+      updateStudents,
+      updateAStudent,
     }

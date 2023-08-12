@@ -9,7 +9,9 @@ router
   .get(studentController.getStudents)
   .post(studentController.addStudents)
   .put(studentController.updateStudents);
-
+router
+  .route("/:id")
+  .put(studentController.updateAStudent)
 router.route("/byEmail/:email").get(studentController.getStudentsByEmail);
 
 export default router;

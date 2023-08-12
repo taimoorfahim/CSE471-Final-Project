@@ -1,0 +1,18 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const router = express_1.default.Router();
+const student_controller_1 = __importDefault(require("../../controllers/student.controller"));
+router
+    .route("/")
+    .get(student_controller_1.default.getStudents)
+    .post(student_controller_1.default.addStudents)
+    .put(student_controller_1.default.updateStudents);
+router
+    .route("/:id")
+    .put(student_controller_1.default.updateAStudent);
+router.route("/byEmail/:email").get(student_controller_1.default.getStudentsByEmail);
+exports.default = router;

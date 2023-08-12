@@ -1,7 +1,11 @@
-import mongoose from "mongoose";
-import { StudentInterface } from "../types/student";
-
-const StudentSchema = new mongoose.Schema<StudentInterface>({
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.StudentModel = void 0;
+const mongoose_1 = __importDefault(require("mongoose"));
+const StudentSchema = new mongoose_1.default.Schema({
     studentId: {
         type: String,
         required: [true, "Student id is required"],
@@ -28,7 +32,7 @@ const StudentSchema = new mongoose.Schema<StudentInterface>({
     },
     roomNumber: {
         type: String,
-        default: ""	
+        default: ""
     },
     semester: {
         type: String,
@@ -45,11 +49,7 @@ const StudentSchema = new mongoose.Schema<StudentInterface>({
         type: String,
         default: ""
     },
-
 }, {
     timestamps: true
 });
-
-
-export const StudentModel =  mongoose.model("Student", StudentSchema);
-
+exports.StudentModel = mongoose_1.default.model("Student", StudentSchema);
