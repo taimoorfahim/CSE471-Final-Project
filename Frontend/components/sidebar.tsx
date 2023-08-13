@@ -47,27 +47,11 @@ const routes = [
         href: "/image",
         color: "text-pink-700",
     },
-    // {
-    //     label: "Music Generation",
-    //     icon: Music,
-    //     href: "/music",
-    //     color: "text-emerald-500",
-    // },
-    // {
-    //     label: "Video Generation",
-    //     icon: VideoIcon,
-    //     href: "/video",
-    //     color: "text-orange-700",
-    // },
 ]
-interface SidebarProps {
-    apiLimitCount: number;
-}
 
 
-const Sidebar = ({
-    apiLimitCount = 0
-}: SidebarProps) => {
+
+const Sidebar = () => {
     const pathName = usePathname();
     return (
         <div className="space-y-4 py-4 flex flex-col h-full bg-[#111827] text-white">
