@@ -3,7 +3,6 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { colorSchema } from "@/lib/ColorSchema";
 import { Input } from "@/components/ui/input";
-import { WorkshopInterface } from "@/types/workshop";
 import { SeminarInterface } from "@/types/seminar";
 import { StudentInterface } from "@/types/student";
 import axios from "axios";
@@ -24,7 +23,7 @@ const MultiPurposeRegistrationModal = ({
 }: {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  options: (WorkshopInterface | SeminarInterface)[];
+  options: (SeminarInterface)[];
   dedicated: boolean;
 }) => {
   const styles = {
@@ -37,7 +36,7 @@ const MultiPurposeRegistrationModal = ({
   };
 
   const isSeminar = (
-    props: SeminarInterface | WorkshopInterface
+    props: SeminarInterface
   ): props is SeminarInterface => "name" in props;
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -206,13 +205,13 @@ const MultiPurposeRegistrationModal = ({
                           {isSeminar(options[0]) ? "Seminar" : "Workshop"}
                         </option>
                         {options.map(
-                          (option: WorkshopInterface | SeminarInterface) => (
+                          (option: SeminarInterface) => (
                             <option
                               key={option._id}
                               value={option._id}
                               selected={dedicated}
                             >
-                              {isSeminar(option) ? option.name : option.title} (
+                              {option.name} (
                               {`${option.time} at ${option.date}`})
                             </option>
                           )

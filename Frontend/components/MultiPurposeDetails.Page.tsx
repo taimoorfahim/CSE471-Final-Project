@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { SeminarInterface } from "@/types/seminar";
-import { WorkshopInterface } from "@/types/workshop";
+
 import MultiPurposeRegistrationModal from "./MultiPurposeRegistration.Modal";
 import Image from "next/image";
 
 const MultiPurposeDetailsPage = ({
   props,
 }: {
-  props: SeminarInterface | WorkshopInterface;
+  props: SeminarInterface
 }) => {
   const isSeminar = (
-    props: SeminarInterface | WorkshopInterface
+    props: SeminarInterface
   ): props is SeminarInterface => "name" in props;
 
   const [isRegistrationModalOpen, setIsRegistrationModalOpen] =
@@ -34,48 +34,38 @@ const MultiPurposeDetailsPage = ({
           src={props.image}
         />
         {(
-            <h3 className="tracking-widest bg-indigo-400 w-fit p-1 px-2 rounded text-white my-1 text-xs font-medium title-font uppercase">
-              slot: {props.slot} ({props.time})
-            </h3>
-          )}
+          <h3 className="tracking-widest bg-indigo-400 w-fit p-1 px-2 rounded text-white my-1 text-xs font-medium title-font uppercase">
+            slot: {props.slot} ({props.time})
+          </h3>
+        )}
         <div className="text-center lg:w-2/3 w-full">
           <h1 className="title-font sm:text-4xl text-3xl mb-4 font-bold text-white">
-            {isSeminar(props) ? props.name : props.title}
+            {props.name}
           </h1>
 
           <h1 className="my-4 text-indigo-500 font-bold text-lg uppercase">
             {isSeminar(props) ? "Details" : "Objective"}
           </h1>
           <p className="leading-relaxed text-md font-semibold mb-8">
-            {isSeminar(props)
-              ? makeLine(props.details)
-              : makeLine(props.objective)}
+            {
+              makeLine(props.details)
+            }
           </p>
 
           <h1 className="my-4 text-indigo-500 font-bold text-lg uppercase">
             {isSeminar(props) ? "Key Speaker" : "Facilitators"}
           </h1>
           <div>
-            {isSeminar(props) ? (
+            {
               <p>{props.keySpeaker}</p>
-            ) : (
-              <div className="flex flex-col">
-                {props.facilitators.map(
-                  (facilitator: string, index: number) => (
-                    <p className="text-md font-semibold" key={index}>
-                      {facilitator}
-                    </p>
-                  )
-                )}
-              </div>
-            )}
+            }
           </div>
 
           <h1 className="my-4 text-indigo-500 font-bold text-lg uppercase">
             Date And Time
           </h1>
           <p className="text-md font-semibold">
-            {props.date} {!isSeminar(props) && props.time}
+            {props.date}
           </p>
 
           <h1 className="my-4 text-indigo-500 font-bold text-lg uppercase">
