@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { colorSchema } from "@/lib/ColorSchema";
 import React, { useEffect, useState } from "react";
-import { ArrowRight ,CornerRightDown} from "lucide-react";
+import { ArrowRight, CornerRightDown } from "lucide-react";
 import axios from "axios";
 import { apiEndpointV1 } from "@/lib/ApiEndpoints";
 import { toast } from "@/components/ui/Toast";
@@ -19,13 +19,18 @@ import StudentInfoDisplayer from "@/components/StudentInfoDisplayer";
 interface RegistrationInputsInterface {
   email: string;
   phoneNumber: string;
-  activityId: string;
+  activityId: string|any;
+}
+interface PageParams {
+  params: {
+    id: string;
+  } | null;
 }
 
 const progressEmojis = ["👍", "😎", "🤩", "🚀", "🔥"];
 
-const RegisterActivity = () => {
-
+const RegisterActivity = ({ params }: PageParams) => {
+  console.log(params);
   const styles = {
     wrapper: `flex space-y-4 min-h-screen flex-col items-center justify-center py-24 mx-2`,
     button: `${colorSchema.button} mt-6 flex py-3 w-full max-w-lg font-extrabold text-xl rounded-sm 
@@ -57,7 +62,6 @@ const RegisterActivity = () => {
     i1: 0,
     i2: 0,
     i3: 0,
-    i4: 0,
   });
 
   const [activities, setActivities] = useState<ActivityStateInterface[]>([]);
@@ -66,7 +70,7 @@ const RegisterActivity = () => {
     useState<RegistrationInputsInterface>({
       email: "",
       phoneNumber: "",
-      activityId: "",
+      activityId: params?.id ,
     });
 
   const [studentInfo, setStudentInfo] = useState<StudentInterface | null>();
@@ -74,10 +78,11 @@ const RegisterActivity = () => {
   useEffect(() => {
     const getActivities = async () => {
       const regInfo = await axios.get(`${apiEndpointV1}/admin?session=Summer2023`)
-      const res = await axios.get(`${apiEndpointV1}/activityState?registrationDay=${regInfo.data.data[0].registrationDay}`);
+      const res = await axios.get(`${apiEndpointV1}/activityState?activityId=${params?.id}`);
       setActivities(res.data.data);
       setIsOpen(regInfo.data.data[0].isRegistrationOpen)
     };
+
 
     getActivities();
   }, []);
@@ -101,7 +106,7 @@ const RegisterActivity = () => {
   }, [registrationInputs.email]);
 
   const updateProgressCounter = (
-    atr: "i1" | "i2" | "i3" | "i4",
+    atr: "i1" | "i2" | "i3",
     value: string
   ) => {
     const up = progressCounter;
@@ -111,7 +116,7 @@ const RegisterActivity = () => {
       up[`${atr}`] = Math.max(0, up[`${atr}`] - 1);
     }
 
-    up.step = up.i1 + up.i2 + up.i3 + up.i4 + 1;
+    up.step = up.i1 + up.i2 + up.i3 + 1;
     setProgressCounter(up);
   };
 
@@ -195,7 +200,6 @@ const RegisterActivity = () => {
       setIsLoading(false);
     }
   };
-
   return (
     <div className={styles.wrapper}>
       {
@@ -255,7 +259,6 @@ const RegisterActivity = () => {
                   ...registrationInputs,
                   activityId: e.target.value,
                 });
-                updateProgressCounter("i3", e.target.value);
               }}
             >
               {activities.map((activity: ActivityStateInterface) => (
@@ -275,7 +278,7 @@ const RegisterActivity = () => {
               onChange={(e) => {
                 setIsTCChecked(e.target.checked);
                 setShowTC(true)
-                updateProgressCounter("i4", e.target.checked ? "rr" : "");
+                updateProgressCounter("i3", e.target.checked ? "rr" : "");
               }}
             />
             <label htmlFor="radio-button" className={`${styles.label} cursor-pointer no-underline hover:underline decoration-indigo-500`} onClick={() => setShowTC(!showTC)}>
@@ -284,18 +287,18 @@ const RegisterActivity = () => {
             </label>
           </div>
           {
-              showTC && <div className="my-2 p-2 text-white border-2 border-indigo-500 rounded">
-                <h1 className='text-sm font-bold'>Terms and conditions</h1>
-                <p className='text-xs font-semibold'>1. You must confirm your payment after completion of Activity registration.</p>
-                <p className='text-xs font-semibold'>2. If you fail to attend two classes, you will not receive the certificate.</p>
-                <p className='text-xs font-semibold'>3. You will be marked as absent if you are late for 5 minutes in your class.</p>
-              </div>
-            }
+            showTC && <div className="my-2 p-2 text-white border-2 border-indigo-500 rounded">
+              <h1 className='text-sm font-bold'>Terms and conditions</h1>
+              <p className='text-xs font-semibold'>1. You must confirm your payment after completion of Activity registration.</p>
+              <p className='text-xs font-semibold'>2. If you fail to attend two classes, you will not receive the certificate.</p>
+              <p className='text-xs font-semibold'>3. You will be marked as absent if you are late for 5 minutes in your class.</p>
+            </div>
+          }
 
           {/* Progressbar changes based on students inputs */}
-          <Progress value={progressCounter.step * 20} className="mt-2" />
+          <Progress value={progressCounter.step * 25} className="mt-2" />
           <p className={styles.label}>
-            {progressCounter.step}/5 {progressEmojis[progressCounter.step - 1]}
+            {progressCounter.step}/4 {progressEmojis[progressCounter.step - 1]}
           </p>
 
           {/* Error msg */}
@@ -304,7 +307,7 @@ const RegisterActivity = () => {
           )}
 
           {/* Student info based on valid G-Suite  */}
-          {studentInfo && <StudentInfoDisplayer studentInfo={studentInfo} /> }
+          {studentInfo && <StudentInfoDisplayer studentInfo={studentInfo} />}
 
           {/* Confirmation button */}
           <button
@@ -323,16 +326,13 @@ const RegisterActivity = () => {
             )}
           </button>
         </form> : <>
-          {/* {
-            isOpen === null ? <LoadingSpinner /> : 
-            <h1 className="text-3xl font-bold text-white">Registration is closed. Will Open for Civic Engagements (Project Srijon) on the <span className="text-indigo-500">30th May, 2023 at 11AM</span></h1>
-          } */}
+
           {
-            isOpen === null ? <LoadingSpinner /> : 
-            <div>
-              <h1 className="text-3xl font-bold text-white">Registration for RS activities is<span className="text-indigo-500 uppercase"> Closed </span></h1>
-              {/* <Link href='/activity-enrollment-schedule'><p className="mt-8 text-lg text-indigo-500 font-semibold text-center">In the meantime click here visit sign up schedule 📅</p></Link> */}
-            </div>
+            isOpen === null ? <LoadingSpinner /> :
+              <div>
+                <h1 className="text-3xl font-bold text-white">Registration for RS activities is<span className="text-indigo-500 uppercase"> Closed </span></h1>
+
+              </div>
           }
         </>
       }

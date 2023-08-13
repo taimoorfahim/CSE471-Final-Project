@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
-import { Code, ImageIcon, LayoutDashboard, CalendarCheck, MusicIcon,ArrowBigRightDash, Tent  } from "lucide-react";
+import { Code, ImageIcon, LayoutDashboard, CalendarCheck, MusicIcon,ArrowBigRightDash, Tent, Music, VideoIcon  } from "lucide-react";
 
 const montserrat = Montserrat({ weight: "600", subsets: ["latin"] })
 
@@ -47,6 +47,18 @@ const routes = [
         href: "/image",
         color: "text-pink-700",
     },
+    // {
+    //     label: "Music Generation",
+    //     icon: Music,
+    //     href: "/music",
+    //     color: "text-emerald-500",
+    // },
+    // {
+    //     label: "Video Generation",
+    //     icon: VideoIcon,
+    //     href: "/video",
+    //     color: "text-orange-700",
+    // },
 ]
 interface SidebarProps {
     apiLimitCount: number;

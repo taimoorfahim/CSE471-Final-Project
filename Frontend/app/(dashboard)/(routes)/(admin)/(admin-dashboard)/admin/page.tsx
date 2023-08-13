@@ -14,6 +14,7 @@ import React, { useEffect, useState } from "react";
 import downloadExcel from '@/lib/downloadExcel';
 import { ActivityStateInterface } from "@/types/activityState";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import AddNewStudent from "@/components/AddStudent";
 
 const registrationDays = ['Civic Engagement', 'Activity Day 1', 'Activity Day 2', 'Activity Day 3']
 
@@ -159,90 +160,80 @@ const AdminDashboard = () => {
       ) : (
         <div className="w-full max-w-5xl flex items-center justify-center">
           {
-            activityRegistrationSettings._id !== '0' ? <div>
-              <div className="my-6 p-3 border-4 border-gray-800">
-                <h1 className="text-indigo-500 font-extrabold text-4xl mb-2">Activity Registration Controller</h1>
-                <div className="flex space-x-4 items-center">
-                  <h1 className="my-2 font-bold text-xl text-white">Turn on registration</h1>
-                  <input
-                    type="checkbox"
-                    className="w-4 h-4 text-blue-500"
-                    checked={activityRegistrationSettings.isRegistrationOpen}
-                    onChange={(e) => {
-                      setActivityRegistrationSettings({ ...activityRegistrationSettings, isRegistrationOpen: e.target.checked })
-                      setClicked(true)
-                    }}
-                  />
-                </div>
-                <h1 className="my-2 font-bold text-xl text-white">Select Activity Registration Day</h1>
-                <select
-                  id="large"
-                  className={styles.select}
-                  defaultValue={activityRegistrationSettings.registrationDay}
-                  onChange={(e) => {
-                    setActivityRegistrationSettings({ ...activityRegistrationSettings, registrationDay: e.target.value !== "" ? parseInt(e.target.value) : 1 })
-                    setClicked(true)
-                  }}
-                >
-                  <option value="">Select registration date</option>
+            activityRegistrationSettings._id !== '0' ?
+              <div>
+                <div className="flex justify-center">
+                  <div className="my-6 p-3 border-2 border-indigo-500 mr-5">
+                    <h1 className="text-indigo-500 font-extrabold text-4xl mb-2">Activity Registration Controller</h1>
+                    <div className="flex space-x-4 items-center">
+                      <h1 className="my-2 font-bold text-xl text-white">Turn on registration</h1>
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 text-blue-500"
+                        checked={activityRegistrationSettings.isRegistrationOpen}
+                        onChange={(e) => {
+                          setActivityRegistrationSettings({ ...activityRegistrationSettings, isRegistrationOpen: e.target.checked })
+                          setClicked(true)
+                        }}
+                      />
+                    </div>
+                    <h1 className="my-2 font-bold text-xl text-white">Select Activity Registration Day</h1>
+                    <select
+                      id="large"
+                      className={styles.select}
+                      defaultValue={activityRegistrationSettings.registrationDay}
+                      onChange={(e) => {
+                        setActivityRegistrationSettings({ ...activityRegistrationSettings, registrationDay: e.target.value !== "" ? parseInt(e.target.value) : 1 })
+                        setClicked(true)
+                      }}
+                    >
+                      <option value="">Select registration date</option>
 
-                  {
-                    registrationDays.map((day: string, index: number) => (
-                      <option key={index} value={index}>
-                        {day}
-                      </option>
-                    ))
-                  }
-                </select>
+                      {
+                        registrationDays.map((day: string, index: number) => (
+                          <option key={index} value={index}>
+                            {day}
+                          </option>
+                        ))
+                      }
+                    </select>
+                  </div>
+
+                  <div className="my-6 p-3 border-2 border-indigo-500 ml-5">
+                    <h1 className="my-2 font-bold text-4xl text-indigo-500">Seat Status</h1>
+                    <h1 className="my-2 font-bold text-2xl text-white"> <span className="text-indigo-500">{overallSeatStatus.totalBookedSeat}/{overallSeatStatus.totalSeat}</span> till {overallSeatStatus._id}</h1>
+
+                    <div className="flex items-center justify-between">
+                      <h1 className="my-2 font-bold text-xl text-white">Registered Students to an activity</h1>
+
+                    </div>
+
+                    <div className="my-3 flex flex-col">
+                      <label className={styles.label}>
+                        Export Registration Sheets
+                      </label>
+                      <select
+                        id="large"
+                        className={styles.select}
+                        onChange={(e) => downloadExcel(e.target.value)}
+                      >
+                        <option value="">Select Activity</option>
+                        <option value="All">All</option>
+                        {activities.map((activity: ActivityStateInterface) => (
+                          <option key={activity.activityId._id} value={activity.activityId.name}>
+                            {activity.activityId.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <AddNewStudent />
               </div>
-
-              <div className="my-6 p-3 border-4 border-gray-800">
-                <h1 className="my-2 font-bold text-3xl text-indigo-500">Seat Status</h1>
-                <h1 className="my-2 font-bold text-2xl text-white"> <span className="text-indigo-500">{overallSeatStatus.totalBookedSeat}/{overallSeatStatus.totalSeat}</span> till {overallSeatStatus._id}</h1>
-
-                <div className="flex items-center justify-between">
-                  <h1 className="my-2 font-bold text-xl text-white">Registered Students to an activity</h1>
-                  {/* <Link
-              href={`${apiEndpointV1}/registration/export`}
-              className={styles.exportButton}
-            >
-              Export
-            </Link> */}
-                  {/* <div
-              onClick={() => {
-                downloadExcel('Project SRIJON( ICT )')
-              }}
-              className={styles.exportButton}
-            >
-              Export
-            </div> */}
-                </div>
-
-                <div className="my-3 flex flex-col">
-                  <label className={styles.label}>
-                    Export Registration Sheets
-                  </label>
-                  <select
-                    id="large"
-                    className={styles.select}
-                    onChange={(e) => downloadExcel(e.target.value)}
-                  >
-                    <option value="">Select Activity</option>
-                    <option value="All">All</option>
-                    {activities.map((activity: ActivityStateInterface) => (
-                      <option key={activity.activityId._id} value={activity.activityId.name}>
-                        {activity.activityId.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
-              : <h1 className="text-white font-semibold"><LoadingSpinner/></h1>
+              : <h1 className="text-white font-semibold"><LoadingSpinner /></h1>
           }
-          {/* {
-            registrationInfo.length > 0 && <ActivityRegStudentTable registrationInfo={registrationInfo} />
-          } */}
+          
         </div>
       )}
     </div>
