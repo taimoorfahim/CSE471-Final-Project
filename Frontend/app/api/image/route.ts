@@ -29,13 +29,11 @@ export const POST = async (
 
 
 
-
         const response = await openai.createImage({
             prompt,
             n: parseInt(amount,10),
             size: resolution,
         })
-
 
         return NextResponse.json(response.data.data);
     }

@@ -7,8 +7,7 @@ const Dashboardlayout = async ({
 }: {
     children: React.ReactNode
 }) => {
-    // const apiLimitCount = await getApiLimitCount();
-    const apiLimitCount = 0
+   
 
     return (
         <div className="h-full relative">
